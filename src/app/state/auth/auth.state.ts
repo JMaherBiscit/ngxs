@@ -16,11 +16,16 @@ export class AuthState {
   @Action(AuthLoginAction)
   login(ctx: StateContext<AuthStateModel>, action: AuthLoginAction) {
     // handleRequestPayload(action.payload);
+
+    ctx.patchState({
+      loading: true,
+    });
     return this.authService.login().pipe(
       tap((result) => {
         ctx.patchState({
           token: result.token,
           username: result.username,
+          loading: false,
         });
       })
     );
@@ -29,11 +34,16 @@ export class AuthState {
   @Action(AuthLogoutAction)
   logout(ctx: StateContext<AuthStateModel>, action: AuthLogoutAction) {
     // handleRequestPayload(action.payload);
+
+    ctx.patchState({
+      loading: true,
+    });
     return this.authService.logout().pipe(
       tap(() => {
         ctx.patchState({
           token: null,
           username: null,
+          loading: false,
         });
       })
     );

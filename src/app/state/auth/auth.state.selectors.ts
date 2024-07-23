@@ -17,4 +17,9 @@ export class AuthSelectors {
   static username(state: AuthStateModel) {
     return state.username;
   }
+
+  @Selector([AuthState])
+  static loading(state: AuthStateModel) {
+    return state.loading;
+  }
 }

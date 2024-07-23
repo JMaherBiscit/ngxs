@@ -1,6 +1,25 @@
-<div class="h-dvh w-dvh flex items-center justify-center">
+<div class="h-dvh w-dvh flex flex-col gap-8 items-center justify-center">
   @if((isAuthenticated$ | async) === false) {
-  <button class="btn btn-primary" (click)="login()">Login</button>
+  <button
+    class="btn btn-primary"
+    [ngClass]="{ 'btn-disabled': loading$ | async }"
+    (click)="login()"
+  >
+    Login @if (loading$ | async) {
+    <span class="loading loading-dots loading-md"></span>
+    }
+  </button>
+  } @else { @let username = (username$ | async);
+  <p class="text-lg">Welcome, {{ username }}</p>
+
+  <button
+    class="btn btn-primary"
+    [ngClass]="{ 'btn-disabled': loading$ | async }"
+    (click)="logout()"
+  >
+    Logout @if (loading$ | async) {
+    <span class="loading loading-dots loading-md"></span>
+    }
+  </button>
   }
-  <button class="btn btn-primary" (click)="logout()">Logout</button>
 </div>
