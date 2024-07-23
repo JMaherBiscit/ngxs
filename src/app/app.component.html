@@ -1,25 +1,33 @@
-<div class="h-dvh w-dvh flex flex-col gap-8 items-center justify-center">
-  @if((isAuthenticated$ | async) === false) {
-  <button
-    class="btn btn-primary"
-    [ngClass]="{ 'btn-disabled': loading$ | async }"
-    (click)="login()"
-  >
-    Login @if (loading$ | async) {
-    <span class="loading loading-dots loading-md"></span>
-    }
-  </button>
-  } @else { @let username = (username$ | async);
-  <p class="text-lg">Welcome, {{ username }}</p>
+<div class="h-dvh bg-slate-300">
+  <div class="flex items-center justify-center pt-8 h-32">
+    <div class="flex flex-col gap-2 items-center justify-center">
+      <h1 class="text-3xl">NGXS Demo</h1>
+    </div>
+  </div>
+  <div class="h-[60vh] w-dvh flex flex-col gap-8 items-center justify-center">
+    @if((isAuthenticated$ | async) === false) {
+    <p class="text-lg">You are currently not logged in. Please login</p>
+    <button
+      class="btn btn-primary"
+      [ngClass]="{ 'btn-disabled': loading$ | async }"
+      (click)="login()"
+    >
+      Login @if (loading$ | async) {
+      <span class="loading loading-dots loading-md"></span>
+      }
+    </button>
+    } @else { @let username = (username$ | async);
+    <p class="text-lg">Welcome, {{ username }}</p>
 
-  <button
-    class="btn btn-primary"
-    [ngClass]="{ 'btn-disabled': loading$ | async }"
-    (click)="logout()"
-  >
-    Logout @if (loading$ | async) {
-    <span class="loading loading-dots loading-md"></span>
+    <button
+      class="btn btn-primary"
+      [ngClass]="{ 'btn-disabled': loading$ | async }"
+      (click)="logout()"
+    >
+      Logout @if (loading$ | async) {
+      <span class="loading loading-dots loading-md"></span>
+      }
+    </button>
     }
-  </button>
-  }
+  </div>
 </div>

@@ -30,4 +30,14 @@ export class AppComponent {
   logout() {
     this.store.dispatch(new AuthLogoutAction());
   }
+
+  functionThatDoesSomethingImportant() {
+    const snapshotToken = this.store.selectSnapshot(AuthSelectors.token);
+    console.log(`The token value at this point in time is: ${snapshotToken}`);
+    this.store.select(AuthSelectors.username).subscribe((username) => {
+      console.log(
+        `I have subscribed to the observable for username. My current username is: ${username}`
+      );
+    });
+  }
 }

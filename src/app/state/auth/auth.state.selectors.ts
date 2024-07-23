@@ -22,4 +22,9 @@ export class AuthSelectors {
   static loading(state: AuthStateModel) {
     return state.loading;
   }
+
+  @Selector([AuthState])
+  static hasUsername(state: AuthStateModel) {
+    return !!state.token && !!state.username;
+  }
 }

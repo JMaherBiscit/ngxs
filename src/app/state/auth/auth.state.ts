@@ -7,7 +7,11 @@ import { tap } from 'rxjs';
 
 @State<AuthStateModel>({
   name: 'auth',
-  defaults: authStateModelDefaults,
+  defaults: {
+    loading: false,
+    token: null,
+    username: null,
+  },
 })
 @Injectable()
 export class AuthState {
