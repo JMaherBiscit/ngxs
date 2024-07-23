@@ -1,3 +1,6 @@
 <div class="h-dvh w-dvh flex items-center justify-center">
-  <h1 class="text-5xl underline">Hi</h1>
+  @if((isAuthenticated$ | async) === false) {
+  <button class="btn btn-primary" (click)="login()">Login</button>
+  }
+  <button class="btn btn-primary" (click)="logout()">Logout</button>
 </div>
