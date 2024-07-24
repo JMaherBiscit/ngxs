@@ -2,8 +2,13 @@ import { Injectable } from '@angular/core';
 import { Action, State, StateContext } from '@ngxs/store';
 import { AuthStateModel, authStateModelDefaults } from './auth.state.model';
 import { AuthService } from 'src/app/services/auth.service';
-import { AuthLoginAction, AuthLogoutAction } from './auth.actions';
-import { tap } from 'rxjs';
+import {
+  LoginUser,
+  LogoutUser,
+  SetLoginData,
+  SetUserError,
+} from './auth.actions';
+import { catchError, finalize, map, tap } from 'rxjs';
 
 @State<AuthStateModel>({
   name: 'auth',
@@ -11,34 +16,57 @@ import { tap } from 'rxjs';
     loading: false,
     token: null,
     username: null,
+    error: null,
   },
 })
 @Injectable()
 export class AuthState {
   constructor(private authService: AuthService) {}
 
-  @Action(AuthLoginAction)
-  login(ctx: StateContext<AuthStateModel>, action: AuthLoginAction) {
-    // handleRequestPayload(action.payload);
-
+  // Command
+  @Action(LoginUser)
+  login(ctx: StateContext<AuthStateModel>, action: LoginUser) {
     ctx.patchState({
       loading: true,
     });
+
     return this.authService.login().pipe(
       tap((result) => {
+        // Setter
+        ctx.dispatch(new SetLoginData(result.token, result.username));
+      }),
+      catchError((error) => {
+        ctx.dispatch(new SetUserError(error));
+        return error;
+      }),
+      finalize(() => {
         ctx.patchState({
-          token: result.token,
-          username: result.username,
           loading: false,
         });
       })
     );
   }
 
-  @Action(AuthLogoutAction)
-  logout(ctx: StateContext<AuthStateModel>, action: AuthLogoutAction) {
-    // handleRequestPayload(action.payload);
+  //Event
+  @Action(SetLoginData)
+  setLoginSuccess(ctx: StateContext<AuthStateModel>, action: SetLoginData) {
+    ctx.patchState({
+      token: action.token,
+      username: action.username,
+    });
+  }
 
+  @Action(SetUserError)
+  setLoginError(ctx: StateContext<AuthStateModel>, action: SetUserError) {
+    console.error('Error logging in', action.error);
+    ctx.patchState({
+      error: action.error,
+      loading: false,
+    });
+  }
+
+  @Action(LogoutUser)
+  logout(ctx: StateContext<AuthStateModel>, action: LogoutUser) {
     ctx.patchState({
       loading: true,
     });

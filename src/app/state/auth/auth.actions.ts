@@ -3,12 +3,29 @@ export class AuthAction {
   constructor(readonly payload: string) {}
 }
 
-export class AuthLoginAction {
-  static readonly type = '[Auth] Login';
+// Commands
+export class LoginUser {
+  static readonly type = '[Auth] Login User';
   constructor(readonly payload: string) {}
 }
 
-export class AuthLogoutAction {
-  static readonly type = '[Auth] Logout';
+export class LogoutUser {
+  static readonly type = '[Auth] Logout User';
+  constructor() {}
+}
+
+// Actions
+export class SetLoginData {
+  static readonly type = '[Auth] Set Login Success';
+  constructor(readonly token: string, readonly username: string) {}
+}
+
+export class SetUserError {
+  static readonly type = '[Auth] Set User Error';
+  constructor(readonly error: string) {}
+}
+
+export class SetLogoutSuccess {
+  static readonly type = '[Auth] Set Logout Success';
   constructor() {}
 }

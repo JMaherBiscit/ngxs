@@ -24,6 +24,11 @@ export class AuthSelectors {
   }
 
   @Selector([AuthState])
+  static error(state: AuthStateModel) {
+    return state.error;
+  }
+
+  @Selector([AuthState])
   static hasUsername(state: AuthStateModel) {
     return !!state.token && !!state.username;
   }

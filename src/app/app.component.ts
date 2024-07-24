@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { LoginUser, LogoutUser } from './state/auth/auth.actions';
 import { AuthSelectors } from './state/auth/auth.state.selectors';
-import { AuthLoginAction, AuthLogoutAction } from './state/auth/auth.actions';
-import { AsyncPipe, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +14,7 @@ import { AsyncPipe, NgClass } from '@angular/common';
 })
 export class AppComponent {
   constructor(private store: Store) {}
+
   token$: Observable<string | null> = this.store.select(AuthSelectors.token);
   isAuthenticated$: Observable<boolean> = this.store.select(
     AuthSelectors.isAuthenticated
@@ -22,22 +23,22 @@ export class AppComponent {
     AuthSelectors.username
   );
   loading$: Observable<boolean> = this.store.select(AuthSelectors.loading);
+  error$: Observable<string | null> = this.store.select(AuthSelectors.error);
 
   login() {
-    this.store.dispatch(new AuthLoginAction('someImportantDataToLogin'));
+    this.store.dispatch(new LoginUser('someImportantDataToLogin'));
   }
 
   logout() {
-    this.store.dispatch(new AuthLogoutAction());
+    this.store.dispatch(new LogoutUser());
   }
 
   functionThatDoesSomethingImportant() {
+    this.store = inject(Store);
     const snapshotToken = this.store.selectSnapshot(AuthSelectors.token);
-    console.log(`The token value at this point in time is: ${snapshotToken}`);
-    this.store.select(AuthSelectors.username).subscribe((username) => {
-      console.log(
-        `I have subscribed to the observable for username. My current username is: ${username}`
-      );
+    console.log(`token at this point in time is: ${snapshotToken}`);
+    this.username$.subscribe((username) => {
+      console.log(`username is: ${username}`);
     });
   }
 }
